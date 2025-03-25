@@ -1,8 +1,25 @@
 {% extends 'base.html' %}
-
-{% block title %}{% endblock %}
-
 {% block content %}
-	<h2>Bienvenido a tu administrador de tareas</h2>
-	<p>Aqui comenzaras a ser productivo</p>
+  <h2>Crear nueva tarea</h2>
+  <form method="POST">
+    <input type="text" name="title" placeholder="Título" required><br>
+    <textarea name="description" placeholder="Descripción"></textarea><br>
+    <input type="datetime-local" name="due_date"><br>
+    <button type="submit">Agregar tarea</button>
+  </form>
+
+  <hr>
+
+  <h2>Lista de tareas</h2>
+  {% for task in tasks %}
+    <div>
+      <h3>{{ task.title }}</h3>
+      {% if task.description %}<p>{{ task.description }}</p>{% endif %}
+      {% if task.due_date %}<p><strong>Fecha límite:</strong> {{ task.due_date }}</p>{% endif %}
+      <p><strong>Estado:</strong> {% if task.is_done %}✅ Completada{% else %}⏳ Pendiente{% endif %}</p>
+      <hr>
+    </div>
+  {% else %}
+    <p>No tienes tareas todavía.</p>
+  {% endfor %}
 {% endblock %}
