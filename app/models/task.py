@@ -1,6 +1,10 @@
 from app import db
 from datetime import datetime
 
+def get_db():
+    from app import db  # Importa dentro de la función
+    return db
+
 class Task(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(120), nullable=False)
