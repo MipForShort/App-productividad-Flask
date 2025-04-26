@@ -6,7 +6,13 @@ from flask_login import login_required, current_user
 
 main = Blueprint('main', __name__)
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/')
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))
+    return render_template('index.html')
+
+@main.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
@@ -60,3 +66,4 @@ def delete_task(task_id):
     db.session.commit()
     flash('Tarea eliminada exitosamente.', 'success')
     return redirect(url_for('main.home'))
+

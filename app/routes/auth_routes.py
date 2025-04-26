@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.user import User
 from app import db
+from app.routes.main_routes import home
 
 auth = Blueprint('auth', __name__)
 
@@ -57,4 +58,4 @@ def login():
 def logout():
     logout_user()
     flash('Has cerrado sesión.', 'success')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('main.index'))

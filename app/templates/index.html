@@ -1,0 +1,12 @@
+{% extends 'base_public.html' %}
+
+{% block content %}
+<div class="landing-container">
+  <h1>Bienvenido a TaskOrganizer</h1>
+  <p>Organiza tus tareas de forma sencilla y eficiente</p>
+  <div class="landing-buttons">
+    <a href="{{ url_for('auth.login') }}" class="btn login-btn">🔐 Iniciar sesión</a>
+    <a href="{{ url_for('auth.register') }}" class="btn register-btn">🆕 Registrarse</a>
+  </div>
+</div>
+{% endblock %}
