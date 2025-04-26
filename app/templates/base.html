@@ -11,6 +11,11 @@
 <body>
 	<header>
 		<h1>App de productividad</h1>
+		{% if current_user.is_authenticated %}
+  		<form action="{{ url_for('auth.logout') }}" method="get" style="display:inline;">
+    		<button class="logout" type="submit">Cerrar sesión</button>
+  		</form>
+		{% endif %}
 	</header>
 
 	<main>

@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h2>Crear nueva tarea</h2>
-  <form method="POST">
-    <input type="text" name="title" placeholder="Título" required><br>
-    <textarea name="description" placeholder="Descripción"></textarea><br>
-    <input type="datetime-local" name="due_date"><br>
-    <button type="submit">Agregar tarea</button>
-  </form>
-
   <hr>
+
+  <button id="add-task-btn">Agregar tarea</button>
+
+  <!-- Formulario oculto por defecto -->
+  <div id="task-form-modal" class="modal hidden">
+    <form method="POST" action="{{ url_for('main.home') }}">
+      <h2>Nueva tarea</h2>
+      <input type="text" name="title" placeholder="Título" required>
+      <textarea name="description" placeholder="Descripción"></textarea>
+      <input type="datetime-local" name="due_date">
+      <div class="modal-buttons">
+        <button type="submit">Guardar tarea</button>
+        <button type="button" id="cancel-task-btn">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Backdrop -->
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
 
   <h2>Lista de tareas</h2>
   <ul>
@@ -17,11 +28,11 @@
         <strong {% if task.is_done %}style="text-decoration: line-through;"{% endif %}>
           {{ task.title }}
         </strong> - {{ task.description }}
-    
+
         {% if task.due_date %}
           <small>(Fecha límite: {{ task.due_date.strftime('%Y-%m-%d %H:%M') }})</small>
         {% endif %}
-    
+
         <!-- Botón para marcar como completada -->
         <form action="{{ url_for('main.toggle_done', task_id=task.id) }}" method="post" style="display:inline;">
           <button type="submit">
@@ -32,12 +43,44 @@
             {% endif %}
           </button>
         </form>
-    
+
         <!-- Botón para eliminar -->
         <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="post" style="display:inline;">
           <button type="submit">Eliminar</button>
         </form>
       </li>
     {% endfor %}
-    </ul>
+  </ul>
+
+  <!-- Script para mostrar y ocultar el modal con animación -->
+  <script>
+    const modal = document.getElementById('task-form-modal');
+    const backdrop = document.getElementById('modal-backdrop');
+    const addTaskBtn = document.getElementById('add-task-btn');
+    const cancelTaskBtn = document.getElementById('cancel-task-btn');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      backdrop.classList.remove('hidden');
+      modal.classList.add('show');
+      backdrop.classList.add('show');
+    }
+
+    function closeModal() {
+      modal.classList.remove('show');
+      backdrop.classList.remove('show');
+      modal.classList.add('hidden');
+      backdrop.classList.add('hidden');
+    }
+
+    addTaskBtn.addEventListener('click', openModal);
+    cancelTaskBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
 {% endblock %}
